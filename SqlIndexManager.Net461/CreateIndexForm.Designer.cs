@@ -47,7 +47,8 @@
             this.ListFieldGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ListFieldGrid.Location = new System.Drawing.Point(12, 12);
             this.ListFieldGrid.Name = "ListFieldGrid";
-            this.ListFieldGrid.Size = new System.Drawing.Size(449, 298);
+            this.ListFieldGrid.ReadOnly = true;
+            this.ListFieldGrid.Size = new System.Drawing.Size(509, 298);
             this.ListFieldGrid.TabIndex = 0;
             this.ListFieldGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListFieldGrid_CellDoubleClick);
             this.ListFieldGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ListFieldGrid_CellMouseDown);
@@ -60,7 +61,7 @@
             this.ScriptTextBox.Location = new System.Drawing.Point(12, 316);
             this.ScriptTextBox.Multiline = true;
             this.ScriptTextBox.Name = "ScriptTextBox";
-            this.ScriptTextBox.Size = new System.Drawing.Size(449, 71);
+            this.ScriptTextBox.Size = new System.Drawing.Size(509, 71);
             this.ScriptTextBox.TabIndex = 1;
             // 
             // ClusteredCheck
@@ -111,7 +112,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(304, 393);
+            this.button1.Location = new System.Drawing.Point(364, 393);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 6;
@@ -122,7 +123,7 @@
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(386, 393);
+            this.button2.Location = new System.Drawing.Point(446, 393);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 7;
@@ -134,7 +135,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 430);
+            this.ClientSize = new System.Drawing.Size(533, 430);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.FillFactorCheck);
@@ -145,6 +146,7 @@
             this.Controls.Add(this.ListFieldGrid);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CreateIndexForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CreateIndexForm";
             ((System.ComponentModel.ISupportInitialize)(this.ListFieldGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FillFactorNum)).EndInit();

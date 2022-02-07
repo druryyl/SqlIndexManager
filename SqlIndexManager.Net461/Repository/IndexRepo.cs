@@ -85,24 +85,28 @@ namespace SqlIndexManager.Net461.Repository
             }
         }
 
-        public IEnumerable<IndexDefModel> ListIndexDef(string indexName)
+        public IEnumerable<IndexDefModel> ListIndexDef(string indexName, string tableName)
         {
             var sql = @"
                 SELECT
                     aa.name AS IndexName, 
                     bb1.name AS ColName, 
-                    bb.index_column_id AS ColOrder
-                    bb.is_included_column AS IsIncludeCol, 
+                    bb.index_column_id AS ColOrder,
+                    bb.is_included_column AS IsIncludeCol
                 FROM
                     sys.indexes aa
                     LEFT JOIN sys.index_columns bb ON aa.object_id = bb.object_id AND aa.index_id = bb.index_id
                     LEFT JOIN sys.columns bb1 on bb.column_id = bb1.column_id AND aa.object_id = bb1.object_id
+                    LEFT JOIN sys.objects aa1 on aa.object_id = aa1.object_id
                 WHERE 
-                    aa.name = @name
-                order by aa.object_id, aa.index_id, bb.index_column_id ";
+                    aa.name = @name AND
+                    aa1.name = @tableName
+                ORDER BY 
+                    aa.object_id, aa.index_id, bb.index_column_id ";
 
             var dp = new DynamicParameters();
             dp.AddParam("@name", indexName, SqlDbType.VarChar);
+            dp.AddParam("@tableName", tableName, SqlDbType.VarChar);
 
             using (var conn = new SqlConnection(ConnStringHelper.Get()))
             {

@@ -50,7 +50,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ListIndexGrid = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.IndexDefGrid = new System.Windows.Forms.DataGridView();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -66,7 +66,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ListIndexGrid)).BeginInit();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IndexDefGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -292,19 +292,24 @@
             // 
             // ListIndexGrid
             // 
+            this.ListIndexGrid.AllowUserToAddRows = false;
             this.ListIndexGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListIndexGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ListIndexGrid.Location = new System.Drawing.Point(6, 21);
             this.ListIndexGrid.Name = "ListIndexGrid";
+            this.ListIndexGrid.ReadOnly = true;
             this.ListIndexGrid.Size = new System.Drawing.Size(636, 336);
             this.ListIndexGrid.TabIndex = 0;
             this.ListIndexGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListIndexGrid_CellDoubleClick);
+            this.ListIndexGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ListIndexGrid_CellMouseDown);
+            this.ListIndexGrid.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListIndexGrid_RowEnter);
+            this.ListIndexGrid.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListIndexGrid_RowLeave);
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.dataGridView2);
+            this.groupBox3.Controls.Add(this.IndexDefGrid);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
@@ -313,16 +318,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Index Definition";
             // 
-            // dataGridView2
+            // IndexDefGrid
             // 
-            this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.IndexDefGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(6, 21);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(636, 116);
-            this.dataGridView2.TabIndex = 0;
+            this.IndexDefGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.IndexDefGrid.Location = new System.Drawing.Point(6, 21);
+            this.IndexDefGrid.Name = "IndexDefGrid";
+            this.IndexDefGrid.Size = new System.Drawing.Size(636, 116);
+            this.IndexDefGrid.TabIndex = 0;
             // 
             // ZilongIndexManagerForm
             // 
@@ -351,7 +356,7 @@
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ListIndexGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IndexDefGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,7 +378,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.DataGridView ListIndexGrid;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridView IndexDefGrid;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;

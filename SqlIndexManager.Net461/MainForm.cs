@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Dapper;
+using Microsoft.Win32;
 using SqlIndexManager.Net461.Repository;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,11 @@ namespace SqlIndexManager.Net461
 
         private void ReadIndexButton_Click(object sender, EventArgs e)
         {
+            ReadIndex();
+        }
+
+        private void ReadIndex()
+        {
             InitConnection();
             var dal = new IndexRepo();
             var listIndex = dal.ListIndex();
@@ -93,8 +99,87 @@ namespace SqlIndexManager.Net461
         {
             var grid = (DataGridView)sender;
             var tableName = grid.CurrentRow.Cells["TableName"].Value.ToString();
-            var creteIndexForm = new CreateIndexForm(tableName);
+            var creteIndexForm = new CreateIndexForm(tableName.ToLower().Trim());
+
+            var currentRowIndex = grid.CurrentRow.Index;
             creteIndexForm.ShowDialog();
+            ReadIndex();
+            grid.CurrentCell = grid.Rows[currentRowIndex].Cells[0];
+
+
+        }
+
+        private void ListIndexGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            var grid = (DataGridView)sender;
+            var indexName = grid.CurrentRow.Cells["IndexName"].Value?.ToString()??string.Empty;
+            var tableName = grid.CurrentRow.Cells["TableName"].Value?.ToString()??string.Empty;
+            bool isPrimary = Convert.ToBoolean(grid.CurrentRow.Cells["IsPrimaryKey"].Value);
+            if (indexName == string.Empty)
+                return;
+
+
+            if (e.Button == MouseButtons.Right)
+            {
+                var currentRowIndex = grid.CurrentRow.Index;
+                DeleteIndex(indexName, tableName, isPrimary);
+                ReadIndex();
+                grid.CurrentCell = grid.Rows[currentRowIndex].Cells[0];
+            }
+        }
+
+        private void DeleteIndex(string indexName, string tableName, bool isPrimary)
+        {
+            if (MessageBox.Show($"Delete Index {indexName} on {tableName}?", "Delete Index", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            try
+            {
+                string sql;
+                if(isPrimary)
+                    sql = $"ALTER TABLE {tableName} DROP CONSTRAINT {indexName}";
+                else
+                    sql = $"DROP INDEX {indexName} ON {tableName}";
+                using (var conn = new SqlConnection(ConnStringHelper.Get()))
+                {
+                    conn.Execute(sql);
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }   
+            
+        }
+
+        private void ViewIndexDef(string indexName, string tableName)
+        {
+            if(indexName == String.Empty)
+                IndexDefGrid.DataSource = null;
+
+            var dal = new IndexRepo();
+            var listIndexDef = dal.ListIndexDef(indexName, tableName);
+            IndexDefGrid.DataSource = listIndexDef;
+        }
+
+        private void ListIndexGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            var grid = (DataGridView)sender;
+            var indexName = grid.Rows[e.RowIndex]?.Cells["IndexName"].Value?.ToString() ?? string.Empty;
+            var tableName = grid.Rows[e.RowIndex]?.Cells["TableName"].Value?.ToString() ?? string.Empty;
+
+            ViewIndexDef(indexName, tableName);
+        }
+
+        private void ListIndexGrid_CurrentCellChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ListIndexGrid_RowLeave(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
