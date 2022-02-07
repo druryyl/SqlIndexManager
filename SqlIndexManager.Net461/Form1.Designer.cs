@@ -1,6 +1,6 @@
 ﻿namespace SqlIndexManager.Net461
 {
-    partial class Form1
+    partial class ZilongIndexManagerForm
     {
         /// <summary>
         /// Required designer variable.
@@ -33,6 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.ReadIndexButton = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -50,7 +51,6 @@
             this.ListIndexGrid = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.ReadIndexButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -126,6 +126,16 @@
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Index Profile";
+            // 
+            // ReadIndexButton
+            // 
+            this.ReadIndexButton.Location = new System.Drawing.Point(9, 25);
+            this.ReadIndexButton.Name = "ReadIndexButton";
+            this.ReadIndexButton.Size = new System.Drawing.Size(226, 23);
+            this.ReadIndexButton.TabIndex = 7;
+            this.ReadIndexButton.Text = "List Available Index";
+            this.ReadIndexButton.UseVisualStyleBackColor = true;
+            this.ReadIndexButton.Click += new System.EventHandler(this.ReadIndexButton_Click);
             // 
             // button3
             // 
@@ -314,17 +324,7 @@
             this.dataGridView2.Size = new System.Drawing.Size(636, 116);
             this.dataGridView2.TabIndex = 0;
             // 
-            // ReadIndexButton
-            // 
-            this.ReadIndexButton.Location = new System.Drawing.Point(9, 25);
-            this.ReadIndexButton.Name = "ReadIndexButton";
-            this.ReadIndexButton.Size = new System.Drawing.Size(226, 23);
-            this.ReadIndexButton.TabIndex = 7;
-            this.ReadIndexButton.Text = "List Available Index";
-            this.ReadIndexButton.UseVisualStyleBackColor = true;
-            this.ReadIndexButton.Click += new System.EventHandler(this.ReadIndexButton_Click);
-            // 
-            // Form1
+            // ZilongIndexManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -332,8 +332,8 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "ZilongIndexManagerForm";
+            this.Text = "Zilong Index Manager";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);

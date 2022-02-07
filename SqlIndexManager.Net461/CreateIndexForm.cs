@@ -1,8 +1,10 @@
-﻿using SqlIndexManager.Net461.Repository;
+﻿using Dapper;
+using SqlIndexManager.Net461.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,9 @@ namespace SqlIndexManager.Net461
             InitializeComponent();
             TableName = tableName;
 
+            ListCol = new List<string>();
+            ListIncludeCol = new List<string>();
+
             ListField();
         }
 
@@ -33,9 +38,11 @@ namespace SqlIndexManager.Net461
             ListFieldGrid.DataSource = listField;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ResetButton_Click(object sender, EventArgs e)
         {
-
+            ListCol = new List<string>();
+            ListIncludeCol = new List<string>();
+            GenCreateIndexScript();
         }
 
         private void ListFieldGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -45,7 +52,8 @@ namespace SqlIndexManager.Net461
                 return;
 
             var fieldName = grid.CurrentRow.Cells["FieldName"].Value.ToString();
-            ListIncludeCol.Add(fieldName);
+            ListIncludeCol.Add(fieldName.ToLower());
+            GenCreateIndexScript();
 
         }
 
@@ -53,55 +61,98 @@ namespace SqlIndexManager.Net461
         {
             var grid = (DataGridView)sender;
             var fieldName = grid.CurrentRow.Cells["FieldName"].Value.ToString();
-            ListCol.Add(fieldName);
+            ListCol.Add(fieldName.ToLower());
 
             GenCreateIndexScript();
         }
 
         private void GenCreateIndexScript()
         {
-            string script;
+            ScriptTextBox.Text = String.Empty;
             if (ClusteredCheck.Checked)
             {
                 if (UniqueCheck.Checked)
-                    script = "CREATE UNIQUE CLUSTERED INDEX UCX_";
+                    ScriptTextBox.AppendText("CREATE UNIQUE CLUSTERED INDEX UCX_");
                 else
-                    script = "CREATE CLUSTERED INDEX CX_";
+                    ScriptTextBox.AppendText("CREATE CLUSTERED INDEX CX_");
             }
             else
             {
                 if (UniqueCheck.Checked)
-                    script = "CREATE UNIQUE INDEX UX_";
+                    ScriptTextBox.AppendText("CREATE UNIQUE INDEX UX_");
                 else
-                    script = "CREATE INDEX IX_";
+                    ScriptTextBox.AppendText("CREATE INDEX IX_");
             }
-            script = "IX_";
 
-            script += $"{TableName}_";
+            ScriptTextBox.AppendText($"{TableName}_");
 
-            script += $"{ListCol.FirstOrDefault() ?? string.Empty}\n";
+            ScriptTextBox.AppendText($"{ListCol.FirstOrDefault() ?? string.Empty}");
+            ScriptTextBox.AppendText(Environment.NewLine);
+            ScriptTextBox.AppendText("    ");
 
-            script += $"ON {TableName} (";
+            ScriptTextBox.AppendText($"ON {TableName} (");
 
             foreach (var field in ListCol)
-                script += $"{field},";
+                ScriptTextBox.AppendText($"{field},");
 
-            script = script.Substring(0, script.Length - 1);
-            script += ")\n";
+            ScriptTextBox.Text = ScriptTextBox.Text.Substring(0, ScriptTextBox.Text.Length - 1);
+            ScriptTextBox.AppendText(")");
+            ScriptTextBox.AppendText(Environment.NewLine);
+            ScriptTextBox.AppendText("    ");
 
-            if(ListIncludeCol.Count != 0)
+
+            if (ListIncludeCol.Count != 0)
             {
-                script += $"INCLUDE (";
-                foreach(var col in ListIncludeCol)
-                    script += $"{col},";
-                script = script.Substring(0, script.Length - 1);
-                script += ")\n";
+                ScriptTextBox.AppendText($"INCLUDE (");
+                foreach (var col in ListIncludeCol)
+                    ScriptTextBox.AppendText($"{col},");
+                ScriptTextBox.Text = ScriptTextBox.Text.Substring(0, ScriptTextBox.Text.Length - 1);
+                ScriptTextBox.AppendText(")");
+                ScriptTextBox.AppendText(Environment.NewLine);
+                ScriptTextBox.AppendText("    ");
             }
 
             if (FillFactorCheck.Checked)
-                script += $"WITH(FILLFACTOR={FillFactorNum})";
+                ScriptTextBox.AppendText($"WITH(FILLFACTOR={FillFactorNum.Value})");
+        }
 
-            ScriptTextBox.Text = script;
+        private void ClusteredCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            GenCreateIndexScript();
+        }
+
+        private void UniqueCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            GenCreateIndexScript();
+
+        }
+
+        private void FillFactorCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            GenCreateIndexScript();
+
+        }
+
+        private void FillFactorNum_ValueChanged(object sender, EventArgs e)
+        {
+            GenCreateIndexScript();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using(var conn = new SqlConnection(ConnStringHelper.Get()))
+                {
+                    conn.Execute(ScriptTextBox.Text);
+                }
+                this.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

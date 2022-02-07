@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 namespace SqlIndexManager.Net461
 {
-    public partial class Form1 : Form
+    public partial class ZilongIndexManagerForm : Form
     {
-        public Form1()
+        public ZilongIndexManagerForm()
         {
             InitializeComponent();
             RegistryKey regKey = Registry.CurrentUser.CreateSubKey("SqlIndexManager");

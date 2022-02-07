@@ -56,6 +56,7 @@
             // 
             this.ScriptTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.ScriptTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ScriptTextBox.Location = new System.Drawing.Point(12, 316);
             this.ScriptTextBox.Multiline = true;
             this.ScriptTextBox.Name = "ScriptTextBox";
@@ -72,6 +73,7 @@
             this.ClusteredCheck.TabIndex = 2;
             this.ClusteredCheck.Text = "Clustered";
             this.ClusteredCheck.UseVisualStyleBackColor = true;
+            this.ClusteredCheck.CheckedChanged += new System.EventHandler(this.ClusteredCheck_CheckedChanged);
             // 
             // UniqueCheck
             // 
@@ -83,6 +85,7 @@
             this.UniqueCheck.TabIndex = 3;
             this.UniqueCheck.Text = "Unique";
             this.UniqueCheck.UseVisualStyleBackColor = true;
+            this.UniqueCheck.CheckedChanged += new System.EventHandler(this.UniqueCheck_CheckedChanged);
             // 
             // FillFactorNum
             // 
@@ -91,6 +94,7 @@
             this.FillFactorNum.Name = "FillFactorNum";
             this.FillFactorNum.Size = new System.Drawing.Size(53, 22);
             this.FillFactorNum.TabIndex = 4;
+            this.FillFactorNum.ValueChanged += new System.EventHandler(this.FillFactorNum_ValueChanged);
             // 
             // FillFactorCheck
             // 
@@ -102,6 +106,7 @@
             this.FillFactorCheck.TabIndex = 5;
             this.FillFactorCheck.Text = "Fill Factor";
             this.FillFactorCheck.UseVisualStyleBackColor = true;
+            this.FillFactorCheck.CheckedChanged += new System.EventHandler(this.FillFactorCheck_CheckedChanged);
             // 
             // button1
             // 
@@ -112,7 +117,7 @@
             this.button1.TabIndex = 6;
             this.button1.Text = "Reset";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.ResetButton_Click);
             // 
             // button2
             // 
@@ -123,6 +128,7 @@
             this.button2.TabIndex = 7;
             this.button2.Text = "Execute";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // CreateIndexForm
             // 

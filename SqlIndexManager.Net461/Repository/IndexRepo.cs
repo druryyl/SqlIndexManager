@@ -47,7 +47,7 @@ namespace SqlIndexManager.Net461.Repository
 
             using (var conn = new SqlConnection(ConnStringHelper.Get()))
             {
-                var result = conn.Read<FieldModel>(sql);
+                var result = conn.Read<FieldModel>(sql, dp);
                 return result;
             }
         }
@@ -106,7 +106,7 @@ namespace SqlIndexManager.Net461.Repository
 
             using (var conn = new SqlConnection(ConnStringHelper.Get()))
             {
-                var result = conn.Read<IndexDefModel>(sql);
+                var result = conn.Read<IndexDefModel>(sql, dp);
                 return result;
             }
         }
