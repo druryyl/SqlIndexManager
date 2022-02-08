@@ -15,8 +15,12 @@ namespace SqlIndexManager.Net461.Model
         public int FillFactorA { get; set; }
         public bool IsUnique { get; set; }
         public bool IsPrimaryKey { get; set; }
+
+        [JsonIgnore]
         public string IndexDef { get => SerializeCol(ListIndexDef); }
+        [JsonIgnore]
         public string IncludeCol { get => SerializeIncludeCol(ListIndexDef); }
+        
         public List<IndexDefProfileDto> ListIndexDef { get; set; }
 
 

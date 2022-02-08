@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -252,12 +253,21 @@ namespace SqlIndexManager.Net461
                 listIndexProfile.Add(indexProfile);
             }
             _listIndexProfile = listIndexProfile;
+
+            ActiveProfileLabel.BackColor = Color.LightPink;
+            ActiveProfileLabel.Text = "DB Profile";
         }
 
-        private void LoadDBProfile(string fileName)
+        private void LoadExternalProfile(string fileName)
         {
-            var strFile = File.ReadAllText(fileName);
-            _listIndexProfile = JsonConvert.DeserializeObject<List<IndexProfileDto>>(strFile);
+            var sr = new StreamReader(fileName);
+            var json = sr.ReadToEnd();
+            var temp = JsonConvert.DeserializeObject<IEnumerable<IndexProfileDto>>(json);
+
+            _listIndexProfile = temp.ToList();
+            ActiveProfileLabel.BackColor = Color.LightGreen;
+            ActiveProfileLabel.Text = "External Profile";
+
 
         }
 
@@ -271,9 +281,23 @@ namespace SqlIndexManager.Net461
 
         private void SaveAsProfileButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Generate Index Profile based on current database?", "Save", MessageBoxButtons.YesNo) == DialogResult.No)
-                return;
-            SaveAsProfile();
+            // Displays a SaveFileDialog so the user can save the Image
+            // assigned to Button2.
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Json File|*.json";
+            saveFileDialog1.Title = "Save Index Profile";
+            saveFileDialog1.ShowDialog();
+
+            // If the file name is not an empty string open it for saving.
+            if (saveFileDialog1.FileName != "")
+            {
+                // Saves the Image via a FileStream created by the OpenFile method.
+                var fs = (System.IO.FileStream)saveFileDialog1.OpenFile();
+                var json = JsonConvert.SerializeObject(_listIndexProfile, Formatting.Indented);
+                var encode = new ASCIIEncoding();
+                fs.Write(encode.GetBytes(json),0, encode.GetByteCount(json));
+                fs.Close();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -283,6 +307,8 @@ namespace SqlIndexManager.Net461
 
         private void ViewProfileButton_Click(object sender, EventArgs e)
         {
+            if (_listIndexProfile == null)
+                return;
             var viewer = new ProfileViewer(_listIndexProfile);
             viewer.ShowDialog();
 
@@ -290,9 +316,26 @@ namespace SqlIndexManager.Net461
 
         private void LoadDBProfile_Click(object sender, EventArgs e)
         {
+
             LoadDBProfile();
 
         }
 
+        private void LoadExternalProfileButton_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    LoadExternalProfile(openFileDialog1.FileName);
+                }
+                catch (SecurityException ex)
+                {
+                    MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                    $"Details:\n\n{ex.StackTrace}");
+                }
+            }
+            
+        }
     }
 }
