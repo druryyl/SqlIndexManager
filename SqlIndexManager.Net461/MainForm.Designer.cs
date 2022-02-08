@@ -33,6 +33,9 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.ReadIndexButton = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -118,15 +121,48 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.button5);
+            this.groupBox4.Controls.Add(this.button4);
+            this.groupBox4.Controls.Add(this.button1);
             this.groupBox4.Controls.Add(this.ReadIndexButton);
             this.groupBox4.Controls.Add(this.button3);
             this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Location = new System.Drawing.Point(3, 223);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(241, 140);
+            this.groupBox4.Size = new System.Drawing.Size(241, 224);
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Index Profile";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(9, 54);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(226, 23);
+            this.button5.TabIndex = 10;
+            this.button5.Text = "Load DB Profile";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.LoadDBProfile_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(9, 112);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(226, 23);
+            this.button4.TabIndex = 9;
+            this.button4.Text = "View Profile";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.ViewProfileButton_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(9, 195);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(226, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Gen Script Form Profile";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // ReadIndexButton
             // 
@@ -140,7 +176,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(9, 102);
+            this.button3.Location = new System.Drawing.Point(9, 140);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(226, 23);
             this.button3.TabIndex = 6;
@@ -150,11 +186,11 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(9, 73);
+            this.button2.Location = new System.Drawing.Point(9, 83);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(226, 23);
             this.button2.TabIndex = 5;
-            this.button2.Text = "Load Profile";
+            this.button2.Text = "Load External Profile";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -401,6 +437,9 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button ReadIndexButton;
         private System.Windows.Forms.TextBox SearchText;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
     }
 }
 

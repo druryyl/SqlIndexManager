@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using SqlIndexManager.Net461.Extensions;
 using SqlIndexManager.Net461.Model;
 using SqlIndexManager.Net461.Repository;
 using System;
@@ -20,6 +21,7 @@ namespace SqlIndexManager.Net461
 {
     public partial class ZilongIndexManagerForm : Form
     {
+        private List<IndexProfileDto> _listIndexProfile;
         public ZilongIndexManagerForm()
         {
             InitializeComponent();
@@ -29,6 +31,8 @@ namespace SqlIndexManager.Net461
             UserIdTextBox.Text = regKey.GetValue("UserID", string.Empty)?.ToString() ?? string.Empty;
             PassTextBox.Text = regKey.GetValue("Password", string.Empty)?.ToString() ?? string.Empty;
             regKey.Close();
+
+            _listIndexProfile = new List<IndexProfileDto>();
         }
 
         private void TestConnectionButton_Click(object sender, EventArgs e)
@@ -216,9 +220,8 @@ namespace SqlIndexManager.Net461
             IndexDefGrid.DataSource = listIndexDef;
         }
 
-        private void SaveAsProfile()
+        private void LoadDBProfile()
         {
-            var sb = new StringBuilder();
             var dal = new IndexRepo();
             var listIndex = new IndexRepo().ListIndex();
             var listIndexProfile = new List<IndexProfileDto>();
@@ -245,14 +248,25 @@ namespace SqlIndexManager.Net461
                     };
                     listDef.Add(indexDefProfile);
                 }
-                indexProfile.IndexDef = listDef;
+                indexProfile.ListIndexDef = listDef;
                 listIndexProfile.Add(indexProfile);
             }
+            _listIndexProfile = listIndexProfile;
+        }
 
-            var json = JsonConvert.SerializeObject(listIndexProfile, Formatting.Indented);
-            sb.Append(json);
-            File.WriteAllText(@"IndexProfileScript.sql", sb.ToString());
-            Process.Start("notepad.exe", @"IndexProfileScript.sql");
+        private void LoadDBProfile(string fileName)
+        {
+            var strFile = File.ReadAllText(fileName);
+            _listIndexProfile = JsonConvert.DeserializeObject<List<IndexProfileDto>>(strFile);
+
+        }
+
+
+        private void SaveAsProfile()
+        {
+            var json = JsonConvert.SerializeObject(_listIndexProfile, Formatting.Indented);
+            File.WriteAllText(@"IndexProfile.txt", json);
+            Process.Start("notepad.exe", @"IndexProfileScript.txt");
         }
 
         private void SaveAsProfileButton_Click(object sender, EventArgs e)
@@ -261,5 +275,24 @@ namespace SqlIndexManager.Net461
                 return;
             SaveAsProfile();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ViewProfileButton_Click(object sender, EventArgs e)
+        {
+            var viewer = new ProfileViewer(_listIndexProfile);
+            viewer.ShowDialog();
+
+        }
+
+        private void LoadDBProfile_Click(object sender, EventArgs e)
+        {
+            LoadDBProfile();
+
+        }
+
     }
 }

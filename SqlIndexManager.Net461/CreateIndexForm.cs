@@ -40,7 +40,7 @@ namespace SqlIndexManager.Net461
         {
             _indexProfile = new IndexProfileDto();
             _indexProfile.TableName = _tableName;
-            _indexProfile.IndexDef = new List<IndexDefProfileDto>();
+            _indexProfile.ListIndexDef = new List<IndexDefProfileDto>();
         }
 
         private void ResetButton_Click(object sender, EventArgs e)
@@ -60,9 +60,9 @@ namespace SqlIndexManager.Net461
             {
                 ColName = fieldName.ToLower(),
                 IsIncludeCol = true,
-                ColOrder = _indexProfile.IndexDef.Count() + 1
+                ColOrder = _indexProfile.ListIndexDef.Count() + 1
             };
-            _indexProfile.IndexDef.Add(indexDef);
+            _indexProfile.ListIndexDef.Add(indexDef);
             GenCreateIndexScript();
 
         }
@@ -75,9 +75,9 @@ namespace SqlIndexManager.Net461
             {
                 ColName = fieldName.ToLower(),
                 IsIncludeCol = false,
-                ColOrder = _indexProfile.IndexDef.Count() + 1
+                ColOrder = _indexProfile.ListIndexDef.Count() + 1
             };
-            _indexProfile.IndexDef.Add(indexDef);
+            _indexProfile.ListIndexDef.Add(indexDef);
 
             GenCreateIndexScript();
         }
@@ -188,6 +188,15 @@ namespace SqlIndexManager.Net461
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void PrimaryCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (PrimaryCheckBox.Checked)
+                _indexProfile.IsPrimaryKey = true;
+            else
+                _indexProfile.IsPrimaryKey = false;
+            GenCreateIndexScript();
         }
     }
 }
