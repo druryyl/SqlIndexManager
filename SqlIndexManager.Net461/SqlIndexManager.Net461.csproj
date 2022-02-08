@@ -70,6 +70,7 @@
     <Compile Include="CreateIndexForm.Designer.cs">
       <DependentUpon>CreateIndexForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\IndexProfileExtension.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +81,7 @@
     <Compile Include="Model\IndexAgg.cs" />
     <Compile Include="Model\IndexDefModel.cs" />
     <Compile Include="Model\IndexModel.cs" />
+    <Compile Include="Model\IndexProfileDto.cs" />
     <Compile Include="Model\TableAgg.cs" />
     <Compile Include="Model\TableModel.cs" />
     <Compile Include="Program.cs" />

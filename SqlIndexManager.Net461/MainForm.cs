@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using SqlIndexManager.Net461.Model;
 using SqlIndexManager.Net461.Repository;
 using System;
@@ -7,7 +8,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +24,7 @@ namespace SqlIndexManager.Net461
         {
             InitializeComponent();
             RegistryKey regKey = Registry.CurrentUser.CreateSubKey("SqlIndexManager");
-            ServerTextBox.Text = regKey.GetValue("Server", string.Empty)?.ToString()??string.Empty;
+            ServerTextBox.Text = regKey.GetValue("Server", string.Empty)?.ToString() ?? string.Empty;
             DbTextBox.Text = regKey.GetValue("Database", string.Empty)?.ToString() ?? string.Empty;
             UserIdTextBox.Text = regKey.GetValue("UserID", string.Empty)?.ToString() ?? string.Empty;
             PassTextBox.Text = regKey.GetValue("Password", string.Empty)?.ToString() ?? string.Empty;
@@ -47,7 +50,6 @@ namespace SqlIndexManager.Net461
         {
             ReadIndex();
         }
-
         private void ServerTextBox_Validated(object sender, EventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -55,7 +57,6 @@ namespace SqlIndexManager.Net461
             regKey.SetValue("Server", textBox.Text);
             regKey.Close();
         }
-
         private void DbTextBox_Validated(object sender, EventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -63,7 +64,6 @@ namespace SqlIndexManager.Net461
             regKey.SetValue("Database", textBox.Text);
             regKey.Close();
         }
-
         private void UserIdTextBox_Validated(object sender, EventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -71,7 +71,6 @@ namespace SqlIndexManager.Net461
             regKey.SetValue("UserID", textBox.Text);
             regKey.Close();
         }
-
         private void PassTextBox_Validated(object sender, EventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -79,7 +78,6 @@ namespace SqlIndexManager.Net461
             regKey.SetValue("Password", textBox.Text);
             regKey.Close();
         }
-
         private void ListIndexGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             var grid = (DataGridView)sender;
@@ -90,24 +88,17 @@ namespace SqlIndexManager.Net461
 
             CreateIndex(tableName);
             ReadIndex();
-            
+
             grid.CurrentCell = grid.Rows[currentRowIndex].Cells[0];
             grid.FirstDisplayedScrollingRowIndex = firstDisplayRow;
 
 
         }
-
-        private void CreateIndex(string tableName)
-        {
-
-            var creteIndexForm = new CreateIndexForm(tableName.ToLower().Trim());
-            creteIndexForm.ShowDialog();
-        }
         private void ListIndexGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             var grid = (DataGridView)sender;
-            var indexName = grid.CurrentRow.Cells["IndexName"].Value?.ToString()??string.Empty;
-            var tableName = grid.CurrentRow.Cells["TableName"].Value?.ToString()??string.Empty;
+            var indexName = grid.CurrentRow.Cells["IndexName"].Value?.ToString() ?? string.Empty;
+            var tableName = grid.CurrentRow.Cells["TableName"].Value?.ToString() ?? string.Empty;
             if (indexName == string.Empty)
                 return;
 
@@ -119,12 +110,11 @@ namespace SqlIndexManager.Net461
 
                 DeleteIndex(indexName, tableName);
                 ReadIndex();
-                
+
                 grid.CurrentCell = grid.Rows[currentRowIndex].Cells[0];
                 grid.FirstDisplayedScrollingRowIndex = firstDisplayRow;
             }
         }
-
         private void ListIndexGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             var grid = (DataGridView)sender;
@@ -133,6 +123,24 @@ namespace SqlIndexManager.Net461
 
             ViewIndexDef(indexName, tableName);
         }
+        private void ListIndexGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (sender is DataGridView gridView)
+            {
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
+                gridView.RowHeadersWidth = 70;
+            }
+        }
+        private void SearchText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                ReadIndex();
+        }
+
+
 
         private void InitConnection()
         {
@@ -156,12 +164,15 @@ namespace SqlIndexManager.Net461
                 result = listIndex;
 
             ListIndexGrid.DataSource = result.ToList();
-            //ListIndexGrid.AutoResizeColumns();
             ListIndexGrid.Columns[0].Width = 200;
             ListIndexGrid.Columns[1].Width = 225;
-            //ListIndexGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            //ListIndexGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            //ListIndexGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.Fill);
+        }
+
+        private void CreateIndex(string tableName)
+        {
+
+            var creteIndexForm = new CreateIndexForm(tableName.ToLower().Trim());
+            creteIndexForm.ShowDialog();
         }
 
         private void DeleteIndex(string indexName, string tableName)
@@ -179,25 +190,25 @@ namespace SqlIndexManager.Net461
                 }
 
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
                 string sql;
                 sql = $"ALTER TABLE [{tableName}] DROP CONSTRAINT [{indexName}]";
                 using (var conn = new SqlConnection(ConnStringHelper.Get()))
                 {
                     conn.Execute(sql);
-                } 
+                }
             }
             catch (Exception ex)
-            { 
+            {
                 MessageBox.Show(ex.Message);
-            }   
-            
+            }
+
         }
 
         private void ViewIndexDef(string indexName, string tableName)
         {
-            if(indexName == String.Empty)
+            if (indexName == String.Empty)
                 IndexDefGrid.DataSource = null;
 
             var dal = new IndexRepo();
@@ -205,23 +216,50 @@ namespace SqlIndexManager.Net461
             IndexDefGrid.DataSource = listIndexDef;
         }
 
-        private void ListIndexGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void SaveAsProfile()
         {
-            DataGridView gridView = sender as DataGridView;
-            if (null != gridView)
+            var sb = new StringBuilder();
+            var dal = new IndexRepo();
+            var listIndex = new IndexRepo().ListIndex();
+            var listIndexProfile = new List<IndexProfileDto>();
+            foreach (var index in listIndex.Where(x => x.IndexType != "HEAP"))
             {
-                foreach (DataGridViewRow r in gridView.Rows)
+                var indexProfile = new IndexProfileDto
                 {
-                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                    IndexName = index.IndexName,
+                    TableName = index.TableName,
+                    IndexType = index.IndexType,
+                    IsPrimaryKey = index.IsPrimaryKey,
+                    IsUnique = index.IsUnique,
+                    FillFactorA = index.FillFactorA,
+                };
+                var indexDef = dal.ListIndexDef(index.IndexName, index.TableName);
+                var listDef = new List<IndexDefProfileDto>();
+                foreach (var def in indexDef)
+                {
+                    var indexDefProfile = new IndexDefProfileDto
+                    {
+                        ColName = def.ColName,
+                        ColOrder = def.ColOrder,
+                        IsIncludeCol = def.IsIncludeCol,
+                    };
+                    listDef.Add(indexDefProfile);
                 }
-                gridView.RowHeadersWidth = 70;
+                indexProfile.IndexDef = listDef;
+                listIndexProfile.Add(indexProfile);
             }
+
+            var json = JsonConvert.SerializeObject(listIndexProfile, Formatting.Indented);
+            sb.Append(json);
+            File.WriteAllText(@"IndexProfileScript.sql", sb.ToString());
+            Process.Start("notepad.exe", @"IndexProfileScript.sql");
         }
 
-        private void SearchText_KeyDown(object sender, KeyEventArgs e)
+        private void SaveAsProfileButton_Click(object sender, EventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
-                 ReadIndex();
+            if (MessageBox.Show("Generate Index Profile based on current database?", "Save", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+            SaveAsProfile();
         }
     }
 }
