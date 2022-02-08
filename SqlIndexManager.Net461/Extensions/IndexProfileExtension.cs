@@ -103,5 +103,29 @@ namespace SqlIndexManager.Net461.Extensions
             return sb.ToString();
 
         }
+
+        private static string DropIndex(IndexProfileDto indexProfile)
+        {
+            if (indexProfile == null)
+                return string.Empty;
+
+            var sb = new StringBuilder();
+            sb.Append($"DROP INDEX {indexProfile.IndexName} ON {indexProfile.TableName}")
+
+            return sb.ToString();
+        }
+
+        private static string DropConstraint(IndexProfileDto indexProfile)
+        {
+            if (indexProfile == null)
+                return string.Empty;
+
+            var sb = new StringBuilder();
+            sb.Append($"ALTER TABLE {indexProfile.TableName} DROP CONSTRAINT {indexProfile.IndexName}");
+
+            return sb.ToString();
+        }
+
+
     }
 }

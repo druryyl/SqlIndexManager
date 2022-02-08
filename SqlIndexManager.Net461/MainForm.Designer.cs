@@ -58,6 +58,7 @@
             this.IndexDefGrid = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.button2 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -124,6 +125,7 @@
             // 
             // IndexProfileGroup
             // 
+            this.IndexProfileGroup.Controls.Add(this.button2);
             this.IndexProfileGroup.Controls.Add(this.ActiveProfileLabel);
             this.IndexProfileGroup.Controls.Add(this.button5);
             this.IndexProfileGroup.Controls.Add(this.button4);
@@ -170,11 +172,11 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(9, 252);
+            this.button1.Location = new System.Drawing.Point(9, 223);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(226, 23);
             this.button1.TabIndex = 8;
-            this.button1.Text = "Gen Script Form Profile";
+            this.button1.Text = "Gen Create Script Form Profile";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -397,6 +399,16 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(6, 252);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(226, 23);
+            this.button2.TabIndex = 11;
+            this.button2.Text = "Gen Drop Script";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // ZilongIndexManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -462,6 +474,7 @@
         private System.Windows.Forms.Label ActiveProfileLabel;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
