@@ -38,14 +38,16 @@
             this.IndexProfileGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.IndexProfileGrid.Location = new System.Drawing.Point(0, 0);
             this.IndexProfileGrid.Name = "IndexProfileGrid";
-            this.IndexProfileGrid.Size = new System.Drawing.Size(453, 473);
+            this.IndexProfileGrid.ReadOnly = true;
+            this.IndexProfileGrid.Size = new System.Drawing.Size(819, 473);
             this.IndexProfileGrid.TabIndex = 0;
+            this.IndexProfileGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.IndexProfileGrid_DataBindingComplete);
             // 
             // ProfileViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(453, 473);
+            this.ClientSize = new System.Drawing.Size(819, 473);
             this.Controls.Add(this.IndexProfileGrid);
             this.Name = "ProfileViewer";
             this.Text = "ProfileViewer";

@@ -14,6 +14,7 @@ namespace SqlIndexManager.Net461.Model
         public int FillFactorA { get; set; }
         public bool IsUnique { get; set; }
         public bool IsPrimaryKey { get; set; }
+        public bool IsUniqueConstraint { get; set; }
         public long UserSeek { get; set; }
         public long UserScan { get; set; }
         public long UserLookUp { get; set; }

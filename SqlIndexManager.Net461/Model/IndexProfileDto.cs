@@ -17,6 +17,9 @@ namespace SqlIndexManager.Net461.Model
         public bool IsPrimaryKey { get; set; }
 
         [JsonIgnore]
+        public bool IsUniqueConstraint { get; set; }
+
+        [JsonIgnore]
         public string IndexDef { get => SerializeCol(ListIndexDef); }
         [JsonIgnore]
         public string IncludeCol { get => SerializeIncludeCol(ListIndexDef); }

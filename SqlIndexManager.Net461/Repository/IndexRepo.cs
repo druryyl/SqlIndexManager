@@ -52,7 +52,7 @@ namespace SqlIndexManager.Net461.Repository
             }
         }
 
-        public IEnumerable<IndexModel> ListIndex()
+        public IEnumerable<IndexModel> ListIndex(int dbID)
         {
             var sql = @"
                 SELECT
@@ -62,6 +62,7 @@ namespace SqlIndexManager.Net461.Repository
                     aa.fill_factor AS FillFactorA,
                     aa.is_unique AS IsUnique, 
                     aa.is_primary_key AS IsPrimaryKey, 
+                    aa.is_unique_constraint AS IsUniqueConstraint,
                     aa2.user_seeks AS UserSeek, 
                     aa2.user_scans AS UserScan, 
                     aa2.user_lookups AS UserLookUp, 
@@ -73,14 +74,18 @@ namespace SqlIndexManager.Net461.Repository
                 FROM 
                     sys.indexes aa
                     LEFT JOIN sys.objects aa1 ON aa.object_id = aa1.object_id
-                    LEFT JOIN sys.dm_db_index_usage_stats aa2 on aa.object_id = aa2.object_id AND aa.index_id = aa2.index_id
+                    LEFT JOIN sys.dm_db_index_usage_stats aa2 on aa.object_id = aa2.object_id AND aa.index_id = aa2.index_id AND aa2.database_id = @dbID
                 WHERE
                     aa1.type = 'U'
                 ORDER BY 
                     aa1.name, aa.index_id ";
+
+            var dp = new DynamicParameters();
+            dp.AddParam("@dbID", dbID, SqlDbType.Int);
+
             using (var conn = new SqlConnection(ConnStringHelper.Get()))
             {
-                var result = conn.Read<IndexModel>(sql);
+                var result = conn.Read<IndexModel>(sql, dp);
                 return result;
             }
         }
@@ -111,6 +116,20 @@ namespace SqlIndexManager.Net461.Repository
             using (var conn = new SqlConnection(ConnStringHelper.Get()))
             {
                 var result = conn.Read<IndexDefModel>(sql, dp);
+                return result;
+            }
+        }
+
+        public int GetDatabaseID(string dbName)
+        {
+            var sql = @"SELECT DB_ID(@dbName) ";
+
+            var dp = new DynamicParameters();
+            dp.AddParam("@dbName", dbName, SqlDbType.VarChar);
+
+            using (var conn = new SqlConnection(ConnStringHelper.Get()))
+            {
+                var result = conn.ReadSingle<int>(sql, dp);
                 return result;
             }
         }

@@ -23,6 +23,7 @@ namespace SqlIndexManager.Net461
     public partial class ZilongIndexManagerForm : Form
     {
         private List<IndexProfileDto> _listIndexProfile;
+        private int _dbID;
         public ZilongIndexManagerForm()
         {
             InitializeComponent();
@@ -160,7 +161,8 @@ namespace SqlIndexManager.Net461
         {
             InitConnection();
             var dal = new IndexRepo();
-            var listIndex = dal.ListIndex();
+            _dbID = dal.GetDatabaseID(DbTextBox.Text);
+            var listIndex = dal.ListIndex(_dbID);
 
             IEnumerable<IndexModel> result;
             if (SearchText.Text.Length > 0)
@@ -224,7 +226,7 @@ namespace SqlIndexManager.Net461
         private void LoadDBProfile()
         {
             var dal = new IndexRepo();
-            var listIndex = new IndexRepo().ListIndex();
+            var listIndex = new IndexRepo().ListIndex(_dbID);
             var listIndexProfile = new List<IndexProfileDto>();
             foreach (var index in listIndex.Where(x => x.IndexType != "HEAP"))
             {
@@ -235,6 +237,7 @@ namespace SqlIndexManager.Net461
                     IndexType = index.IndexType,
                     IsPrimaryKey = index.IsPrimaryKey,
                     IsUnique = index.IsUnique,
+                    IsUniqueConstraint = index.IsUniqueConstraint,
                     FillFactorA = index.FillFactorA,
                 };
                 var indexDef = dal.ListIndexDef(index.IndexName, index.TableName);
@@ -298,7 +301,18 @@ namespace SqlIndexManager.Net461
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (_listIndexProfile == null)
+                return;
 
+            var sb = new StringBuilder();
+            foreach (var index in _listIndexProfile)
+            {
+                sb.AppendLine(index.GenCreateIndexScript());
+                sb.AppendLine("GO");
+                sb.AppendLine();
+            }
+            File.WriteAllText(@"CreateIndexScript.sql", sb.ToString());
+            Process.Start("notepad.exe", @"CreateIndexScript.sql");
         }
 
         private void ViewProfileButton_Click(object sender, EventArgs e)
@@ -334,9 +348,20 @@ namespace SqlIndexManager.Net461
             
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void GenDropScript_Click(object sender, EventArgs e)
         {
+            if (_listIndexProfile == null)
+                return;
 
+            var sb = new StringBuilder();
+            foreach(var index in _listIndexProfile)
+            {
+                sb.AppendLine(index.GenDropIndexScript());
+                sb.AppendLine("GO");
+                sb.AppendLine();
+            }
+            File.WriteAllText(@"DropIndexScript.sql", sb.ToString());
+                Process.Start("notepad.exe", @"DropIndexScript.sql");
         }
     }
 }

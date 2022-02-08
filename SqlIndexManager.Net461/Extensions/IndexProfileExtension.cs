@@ -24,13 +24,13 @@ namespace SqlIndexManager.Net461.Extensions
         {
             var sb = new StringBuilder();
             
-            sb.Append($"ALTER TABLE {indexProfile.TableName}");
+            sb.Append($"ALTER TABLE [{indexProfile.TableName.ToLower()}]");
             //sb.Append($"{indexProfile.IndexDef.OrderBy(x => x.ColOrder).FirstOrDefault(x => x.IsIncludeCol == false).ColName ?? string.Empty}");
             sb.Append(Environment.NewLine);
             sb.Append("    ");
 
-            sb.Append($"ADD CONSTRAINT PK_{indexProfile.TableName}_");
-            sb.Append($"{indexProfile.ListIndexDef.OrderBy(x => x.ColOrder).FirstOrDefault(x => x.IsIncludeCol == false).ColName ?? string.Empty} ");
+            sb.Append($"ADD CONSTRAINT [PK_{indexProfile.TableName.ToLower()}_");
+            sb.Append($"{indexProfile.ListIndexDef.OrderBy(x => x.ColOrder).FirstOrDefault(x => x.IsIncludeCol == false)?.ColName.ToLower() ?? string.Empty}] ");
             sb.Append($"PRIMARY KEY ");
 
             if (indexProfile.IndexType == "CLUSTERED")
@@ -38,7 +38,7 @@ namespace SqlIndexManager.Net461.Extensions
 
             sb.Append("(");
             foreach (var field in indexProfile.ListIndexDef.Where(x => x.IsIncludeCol == false).OrderBy(x => x.ColOrder))
-                sb.Append($"{field.ColName},");
+                sb.Append($"[{field.ColName.ToLower()}],");
             sb.Length--;
             sb.Append(")");
 
@@ -55,28 +55,28 @@ namespace SqlIndexManager.Net461.Extensions
             if (indexProfile.IndexType == "CLUSTERED")
             {
                 if (indexProfile.IsUnique)
-                    sb.Append("CREATE UNIQUE CLUSTERED INDEX UCX_");
+                    sb.Append("CREATE UNIQUE CLUSTERED INDEX [UCX_");
                 else
-                    sb.Append("CREATE CLUSTERED INDEX CX_");
+                    sb.Append("CREATE CLUSTERED INDEX [CX_");
             }
             else
             {
                 if (indexProfile.IsUnique)
-                    sb.Append("CREATE UNIQUE INDEX UX_");
+                    sb.Append("CREATE UNIQUE INDEX [UX_");
                 else
-                    sb.Append("CREATE INDEX IX_");
+                    sb.Append("CREATE INDEX [IX_");
             }
 
-            sb.Append($"{indexProfile.TableName}_");
+            sb.Append($"{indexProfile.TableName.ToLower()}_");
 
-            sb.Append($"{indexProfile.ListIndexDef.FirstOrDefault().ColName ?? string.Empty}");
+            sb.Append($"{indexProfile.ListIndexDef.FirstOrDefault()?.ColName.ToLower() ?? string.Empty}]");
             sb.Append(Environment.NewLine);
             sb.Append("    ");
 
-            sb.Append($"ON {indexProfile.TableName} (");
+            sb.Append($"ON [{indexProfile.TableName.ToLower()}] (");
 
             foreach (var field in indexProfile.ListIndexDef.Where(x => x.IsIncludeCol == false).OrderBy(x => x.ColOrder))
-                sb.Append($"{field.ColName},");
+                sb.Append($"[{field.ColName.ToLower()}],");
 
             sb.Length--;
             sb.Append(")");
@@ -88,7 +88,7 @@ namespace SqlIndexManager.Net461.Extensions
                 sb.Append("    ");
                 sb.Append($"INCLUDE (");
                 foreach (var col in ListIncludeCol)
-                    sb.Append($"{col.ColName},");
+                    sb.Append($"[{col.ColName.ToLower()}],");
                 sb.Length--;
                 sb.Append(")");
             }
@@ -104,13 +104,21 @@ namespace SqlIndexManager.Net461.Extensions
 
         }
 
+        public static string GenDropIndexScript(this IndexProfileDto indexProfile)
+        {
+            if (indexProfile.IsPrimaryKey || indexProfile.IsUniqueConstraint)
+                return DropConstraint(indexProfile);
+
+            return DropIndex(indexProfile);
+        }
+
         private static string DropIndex(IndexProfileDto indexProfile)
         {
             if (indexProfile == null)
                 return string.Empty;
 
             var sb = new StringBuilder();
-            sb.Append($"DROP INDEX {indexProfile.IndexName} ON {indexProfile.TableName}")
+            sb.Append($"DROP INDEX [{indexProfile.IndexName.ToLower()}] ON [{indexProfile.TableName.ToLower()}]");
 
             return sb.ToString();
         }
@@ -121,7 +129,7 @@ namespace SqlIndexManager.Net461.Extensions
                 return string.Empty;
 
             var sb = new StringBuilder();
-            sb.Append($"ALTER TABLE {indexProfile.TableName} DROP CONSTRAINT {indexProfile.IndexName}");
+            sb.Append($"ALTER TABLE [{indexProfile.TableName.ToLower()}] DROP CONSTRAINT [{indexProfile.IndexName.ToLower()}]");
 
             return sb.ToString();
         }
