@@ -48,6 +48,7 @@
             this.TestConnectionButton = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.SearchText = new System.Windows.Forms.TextBox();
             this.ListIndexGrid = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.IndexDefGrid = new System.Windows.Forms.DataGridView();
@@ -281,6 +282,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.SearchText);
             this.groupBox2.Controls.Add(this.ListIndexGrid);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
@@ -290,6 +292,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Index List";
             // 
+            // SearchText
+            // 
+            this.SearchText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SearchText.Location = new System.Drawing.Point(6, 21);
+            this.SearchText.Name = "SearchText";
+            this.SearchText.Size = new System.Drawing.Size(636, 22);
+            this.SearchText.TabIndex = 2;
+            this.SearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchText_KeyDown);
+            // 
             // ListIndexGrid
             // 
             this.ListIndexGrid.AllowUserToAddRows = false;
@@ -297,15 +309,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListIndexGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ListIndexGrid.Location = new System.Drawing.Point(6, 21);
+            this.ListIndexGrid.Location = new System.Drawing.Point(6, 49);
             this.ListIndexGrid.Name = "ListIndexGrid";
             this.ListIndexGrid.ReadOnly = true;
-            this.ListIndexGrid.Size = new System.Drawing.Size(636, 336);
+            this.ListIndexGrid.Size = new System.Drawing.Size(636, 308);
             this.ListIndexGrid.TabIndex = 0;
             this.ListIndexGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListIndexGrid_CellDoubleClick);
             this.ListIndexGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ListIndexGrid_CellMouseDown);
+            this.ListIndexGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.ListIndexGrid_DataBindingComplete);
             this.ListIndexGrid.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListIndexGrid_RowEnter);
-            this.ListIndexGrid.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListIndexGrid_RowLeave);
             // 
             // groupBox3
             // 
@@ -354,6 +366,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ListIndexGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.IndexDefGrid)).EndInit();
@@ -386,6 +399,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button ReadIndexButton;
+        private System.Windows.Forms.TextBox SearchText;
     }
 }
 

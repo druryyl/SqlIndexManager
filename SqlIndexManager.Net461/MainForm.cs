@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Win32;
+using SqlIndexManager.Net461.Model;
 using SqlIndexManager.Net461.Repository;
 using System;
 using System.Collections.Generic;
@@ -41,26 +42,10 @@ namespace SqlIndexManager.Net461
             }
         }
 
-        private void InitConnection()
-        {
-            ConnStringHelper.Set(
-                ServerTextBox.Text,
-                DbTextBox.Text,
-                UserIdTextBox.Text,
-                PassTextBox.Text);
-        }
 
         private void ReadIndexButton_Click(object sender, EventArgs e)
         {
             ReadIndex();
-        }
-
-        private void ReadIndex()
-        {
-            InitConnection();
-            var dal = new IndexRepo();
-            var listIndex = dal.ListIndex();
-            ListIndexGrid.DataSource = listIndex;
         }
 
         private void ServerTextBox_Validated(object sender, EventArgs e)
@@ -99,22 +84,30 @@ namespace SqlIndexManager.Net461
         {
             var grid = (DataGridView)sender;
             var tableName = grid.CurrentRow.Cells["TableName"].Value.ToString();
-            var creteIndexForm = new CreateIndexForm(tableName.ToLower().Trim());
 
             var currentRowIndex = grid.CurrentRow.Index;
-            creteIndexForm.ShowDialog();
+            var firstDisplayRow = grid.FirstDisplayedCell.RowIndex;
+
+            CreateIndex(tableName);
             ReadIndex();
+            
             grid.CurrentCell = grid.Rows[currentRowIndex].Cells[0];
+            grid.FirstDisplayedScrollingRowIndex = firstDisplayRow;
 
 
         }
 
+        private void CreateIndex(string tableName)
+        {
+
+            var creteIndexForm = new CreateIndexForm(tableName.ToLower().Trim());
+            creteIndexForm.ShowDialog();
+        }
         private void ListIndexGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             var grid = (DataGridView)sender;
             var indexName = grid.CurrentRow.Cells["IndexName"].Value?.ToString()??string.Empty;
             var tableName = grid.CurrentRow.Cells["TableName"].Value?.ToString()??string.Empty;
-            bool isPrimary = Convert.ToBoolean(grid.CurrentRow.Cells["IsPrimaryKey"].Value);
             if (indexName == string.Empty)
                 return;
 
@@ -122,13 +115,56 @@ namespace SqlIndexManager.Net461
             if (e.Button == MouseButtons.Right)
             {
                 var currentRowIndex = grid.CurrentRow.Index;
-                DeleteIndex(indexName, tableName, isPrimary);
+                var firstDisplayRow = grid.FirstDisplayedCell.RowIndex;
+
+                DeleteIndex(indexName, tableName);
                 ReadIndex();
+                
                 grid.CurrentCell = grid.Rows[currentRowIndex].Cells[0];
+                grid.FirstDisplayedScrollingRowIndex = firstDisplayRow;
             }
         }
 
-        private void DeleteIndex(string indexName, string tableName, bool isPrimary)
+        private void ListIndexGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            var grid = (DataGridView)sender;
+            var indexName = grid.Rows[e.RowIndex]?.Cells["IndexName"].Value?.ToString() ?? string.Empty;
+            var tableName = grid.Rows[e.RowIndex]?.Cells["TableName"].Value?.ToString() ?? string.Empty;
+
+            ViewIndexDef(indexName, tableName);
+        }
+
+        private void InitConnection()
+        {
+            ConnStringHelper.Set(
+                ServerTextBox.Text,
+                DbTextBox.Text,
+                UserIdTextBox.Text,
+                PassTextBox.Text);
+        }
+
+        private void ReadIndex()
+        {
+            InitConnection();
+            var dal = new IndexRepo();
+            var listIndex = dal.ListIndex();
+
+            IEnumerable<IndexModel> result;
+            if (SearchText.Text.Length > 0)
+                result = listIndex.Where(x => x.TableName.ToLower().Contains(SearchText.Text.ToLower()));
+            else
+                result = listIndex;
+
+            ListIndexGrid.DataSource = result.ToList();
+            //ListIndexGrid.AutoResizeColumns();
+            ListIndexGrid.Columns[0].Width = 200;
+            ListIndexGrid.Columns[1].Width = 225;
+            //ListIndexGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            //ListIndexGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            //ListIndexGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.Fill);
+        }
+
+        private void DeleteIndex(string indexName, string tableName)
         {
             if (MessageBox.Show($"Delete Index {indexName} on {tableName}?", "Delete Index", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
@@ -136,10 +172,7 @@ namespace SqlIndexManager.Net461
             try
             {
                 string sql;
-                if(isPrimary)
-                    sql = $"ALTER TABLE {tableName} DROP CONSTRAINT {indexName}";
-                else
-                    sql = $"DROP INDEX {indexName} ON {tableName}";
+                sql = $"DROP INDEX [{indexName}] ON [{tableName}]";
                 using (var conn = new SqlConnection(ConnStringHelper.Get()))
                 {
                     conn.Execute(sql);
@@ -148,6 +181,15 @@ namespace SqlIndexManager.Net461
             }
             catch (SqlException ex)
             {
+                string sql;
+                sql = $"ALTER TABLE [{tableName}] DROP CONSTRAINT [{indexName}]";
+                using (var conn = new SqlConnection(ConnStringHelper.Get()))
+                {
+                    conn.Execute(sql);
+                } 
+            }
+            catch (Exception ex)
+            { 
                 MessageBox.Show(ex.Message);
             }   
             
@@ -163,23 +205,23 @@ namespace SqlIndexManager.Net461
             IndexDefGrid.DataSource = listIndexDef;
         }
 
-        private void ListIndexGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void ListIndexGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            var grid = (DataGridView)sender;
-            var indexName = grid.Rows[e.RowIndex]?.Cells["IndexName"].Value?.ToString() ?? string.Empty;
-            var tableName = grid.Rows[e.RowIndex]?.Cells["TableName"].Value?.ToString() ?? string.Empty;
-
-            ViewIndexDef(indexName, tableName);
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
+                gridView.RowHeadersWidth = 70;
+            }
         }
 
-        private void ListIndexGrid_CurrentCellChanged(object sender, EventArgs e)
+        private void SearchText_KeyDown(object sender, KeyEventArgs e)
         {
-
-        }
-
-        private void ListIndexGrid_RowLeave(object sender, DataGridViewCellEventArgs e)
-        {
-
+            if(e.KeyCode == Keys.Enter)
+                 ReadIndex();
         }
     }
 }
