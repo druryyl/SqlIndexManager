@@ -10,19 +10,19 @@ namespace SqlIndexManager.Net461.Model
     {
         public string TableName { get; set; }
         public string IndexName { get; set; }
-        public string IndexType { get; set; }
-        public int FillFactorA { get; set; }
-        public bool IsUnique { get; set; }
-        public bool IsPrimaryKey { get; set; }
-        public bool IsUniqueConstraint { get; set; }
-        public long UserSeek { get; set; }
-        public long UserScan { get; set; }
-        public long UserLookUp { get; set; }
-        public long UserUpdate { get; set; }
-        public DateTime LastUserSeek { get; set; }
-        public DateTime LastUserScan { get; set; }
-        public DateTime LastUserLookUp { get; set; }
-        public DateTime LastUserUpdate { get; set; }
+        public string IxType { get; set; }
+        public int FF { get; set; }
+        public bool UQ { get; set; }
+        public bool PK { get; set; }
+        public bool UQC { get; set; }
+        public long USeek { get; set; }
+        public long UScan { get; set; }
+        public long ULookup { get; set; }
+        public long UUpdate { get; set; }
+        public DateTime LSeek { get; set; }
+        public DateTime LScan { get; set; }
+        public DateTime LLookup { get; set; }
+        public DateTime LUpdate { get; set; }
 
     }
 }

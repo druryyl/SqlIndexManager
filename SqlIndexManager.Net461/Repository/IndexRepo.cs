@@ -58,19 +58,19 @@ namespace SqlIndexManager.Net461.Repository
                 SELECT
                     aa1.name AS TableName, 
                     aa.name AS IndexName, 
-                    aa.type_desc AS IndexType, 
-                    aa.fill_factor AS FillFactorA,
-                    aa.is_unique AS IsUnique, 
-                    aa.is_primary_key AS IsPrimaryKey, 
-                    aa.is_unique_constraint AS IsUniqueConstraint,
-                    aa2.user_seeks AS UserSeek, 
-                    aa2.user_scans AS UserScan, 
-                    aa2.user_lookups AS UserLookUp, 
-                    aa2.user_updates AS UserUpdate,
-                    aa2.last_user_seek AS LastUserSeek, 
-                    aa2.last_user_scan AS LastUserScan, 
-                    aa2.last_user_lookup AS LastUserLookUp, 
-                    aa2.last_user_update AS LastUserUpdate
+                    aa.type_desc AS IxType, 
+                    aa.fill_factor AS FF,
+                    aa.is_unique AS UQ, 
+                    aa.is_primary_key AS PK, 
+                    aa.is_unique_constraint AS UQC,
+                    aa2.user_seeks AS USeek, 
+                    aa2.user_scans AS UScan, 
+                    aa2.user_lookups AS ULookup, 
+                    aa2.user_updates AS UUpdate,
+                    aa2.last_user_seek AS LSeek, 
+                    aa2.last_user_scan AS LScan, 
+                    aa2.last_user_lookup AS LLookUp, 
+                    aa2.last_user_update AS LUpdate
                 FROM 
                     sys.indexes aa
                     LEFT JOIN sys.objects aa1 ON aa.object_id = aa1.object_id
@@ -96,7 +96,7 @@ namespace SqlIndexManager.Net461.Repository
                 SELECT
                     aa.name AS IndexName, 
                     bb1.name AS ColName, 
-                    bb.index_column_id AS ColOrder,
+                    bb.key_ordinal AS ColOrder,
                     bb.is_included_column AS IsIncludeCol
                 FROM
                     sys.indexes aa
@@ -107,7 +107,7 @@ namespace SqlIndexManager.Net461.Repository
                     aa.name = @name AND
                     aa1.name = @tableName
                 ORDER BY 
-                    aa.object_id, aa.index_id, bb.index_column_id ";
+                    aa.object_id, aa.index_id, bb.is_included_column, bb.key_ordinal ";
 
             var dp = new DynamicParameters();
             dp.AddParam("@name", indexName, SqlDbType.VarChar);

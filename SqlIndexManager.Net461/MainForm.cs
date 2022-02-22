@@ -173,6 +173,17 @@ namespace SqlIndexManager.Net461
             ListIndexGrid.DataSource = result.ToList();
             ListIndexGrid.Columns[0].Width = 200;
             ListIndexGrid.Columns[1].Width = 225;
+            ListIndexGrid.Columns[2].Width = 80;
+
+            ListIndexGrid.Columns[3].Width = 30;
+            ListIndexGrid.Columns[4].Width = 30;
+            ListIndexGrid.Columns[5].Width = 30;
+            ListIndexGrid.Columns[6].Width = 30;
+
+            ListIndexGrid.Columns[7].Width = 45;
+            ListIndexGrid.Columns[8].Width = 45;
+            ListIndexGrid.Columns[9].Width = 45;
+            ListIndexGrid.Columns[10].Width = 45;
         }
 
         private void CreateIndex(string tableName)
@@ -228,17 +239,17 @@ namespace SqlIndexManager.Net461
             var dal = new IndexRepo();
             var listIndex = new IndexRepo().ListIndex(_dbID);
             var listIndexProfile = new List<IndexProfileDto>();
-            foreach (var index in listIndex.Where(x => x.IndexType != "HEAP"))
+            foreach (var index in listIndex.Where(x => x.IxType != "HEAP"))
             {
                 var indexProfile = new IndexProfileDto
                 {
                     IndexName = index.IndexName,
                     TableName = index.TableName,
-                    IndexType = index.IndexType,
-                    IsPrimaryKey = index.IsPrimaryKey,
-                    IsUnique = index.IsUnique,
-                    IsUniqueConstraint = index.IsUniqueConstraint,
-                    FillFactorA = index.FillFactorA,
+                    IndexType = index.IxType,
+                    IsPrimaryKey = index.PK,
+                    IsUnique = index.UQ,
+                    IsUniqueConstraint = index.UQC,
+                    FillFactorA = index.FF,
                 };
                 var indexDef = dal.ListIndexDef(index.IndexName, index.TableName);
                 var listDef = new List<IndexDefProfileDto>();
