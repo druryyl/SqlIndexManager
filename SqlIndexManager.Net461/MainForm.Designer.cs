@@ -33,13 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.IndexProfileGroup = new System.Windows.Forms.GroupBox();
-            this.ActiveProfileLabel = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.ReadIndexButton = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.LoadExternalProfileButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.PassTextBox = new System.Windows.Forms.TextBox();
@@ -58,7 +52,6 @@
             this.IndexDefGrid = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.button2 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -125,60 +118,13 @@
             // 
             // IndexProfileGroup
             // 
-            this.IndexProfileGroup.Controls.Add(this.button2);
-            this.IndexProfileGroup.Controls.Add(this.ActiveProfileLabel);
-            this.IndexProfileGroup.Controls.Add(this.button5);
-            this.IndexProfileGroup.Controls.Add(this.button4);
-            this.IndexProfileGroup.Controls.Add(this.button1);
             this.IndexProfileGroup.Controls.Add(this.ReadIndexButton);
-            this.IndexProfileGroup.Controls.Add(this.button3);
-            this.IndexProfileGroup.Controls.Add(this.LoadExternalProfileButton);
             this.IndexProfileGroup.Location = new System.Drawing.Point(3, 223);
             this.IndexProfileGroup.Name = "IndexProfileGroup";
             this.IndexProfileGroup.Size = new System.Drawing.Size(241, 281);
             this.IndexProfileGroup.TabIndex = 10;
             this.IndexProfileGroup.TabStop = false;
             this.IndexProfileGroup.Text = "Index Profile";
-            // 
-            // ActiveProfileLabel
-            // 
-            this.ActiveProfileLabel.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ActiveProfileLabel.Location = new System.Drawing.Point(9, 74);
-            this.ActiveProfileLabel.Name = "ActiveProfileLabel";
-            this.ActiveProfileLabel.Size = new System.Drawing.Size(226, 18);
-            this.ActiveProfileLabel.TabIndex = 3;
-            this.ActiveProfileLabel.Text = "No Index Profile";
-            this.ActiveProfileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(9, 95);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(226, 23);
-            this.button5.TabIndex = 10;
-            this.button5.Text = "Load DB Profile";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.LoadDBProfile_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(9, 153);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(226, 23);
-            this.button4.TabIndex = 9;
-            this.button4.Text = "View Profile";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.ViewProfileButton_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(9, 223);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(226, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Gen Create Script Form Profile";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // ReadIndexButton
             // 
@@ -189,26 +135,6 @@
             this.ReadIndexButton.Text = "List Available Index";
             this.ReadIndexButton.UseVisualStyleBackColor = true;
             this.ReadIndexButton.Click += new System.EventHandler(this.ReadIndexButton_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(9, 182);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(226, 23);
-            this.button3.TabIndex = 6;
-            this.button3.Text = "Save As External Profile";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.SaveAsProfileButton_Click);
-            // 
-            // LoadExternalProfileButton
-            // 
-            this.LoadExternalProfileButton.Location = new System.Drawing.Point(9, 124);
-            this.LoadExternalProfileButton.Name = "LoadExternalProfileButton";
-            this.LoadExternalProfileButton.Size = new System.Drawing.Size(226, 23);
-            this.LoadExternalProfileButton.TabIndex = 5;
-            this.LoadExternalProfileButton.Text = "Load External Profile";
-            this.LoadExternalProfileButton.UseVisualStyleBackColor = true;
-            this.LoadExternalProfileButton.Click += new System.EventHandler(this.LoadExternalProfileButton_Click);
             // 
             // groupBox1
             // 
@@ -399,16 +325,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(6, 252);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(226, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Gen Drop Script";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.GenDropScript_Click);
-            // 
             // ZilongIndexManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -464,17 +380,10 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox IndexProfileGroup;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button LoadExternalProfileButton;
         private System.Windows.Forms.Button ReadIndexButton;
         private System.Windows.Forms.TextBox SearchText;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Label ActiveProfileLabel;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.Button button2;
     }
 }
 
