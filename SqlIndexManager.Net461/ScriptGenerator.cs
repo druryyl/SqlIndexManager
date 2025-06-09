@@ -42,7 +42,7 @@ namespace SqlIndexManager.Net461
             if (string.IsNullOrEmpty(TableName) || Fields == null)
                 return string.Empty;
             var script = $"CREATE TABLE {TableName}(\r\n";
-            foreach (var field in Fields)
+            foreach (var field in Fields.Where(x => x.StatusCode != 2))
             {
                 script += $"  {GenGlobalField(field)} {GenGlobalConstraint(field)},\r\n";
             }
