@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZilongIndexManagerForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Connection1Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.Connection2Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -52,6 +53,7 @@
             this.PenalField = new System.Windows.Forms.Panel();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.ListField1Grid = new System.Windows.Forms.DataGridView();
+            this.ExecuteScriptButton = new System.Windows.Forms.Button();
             this.CreateTableCheckBox = new System.Windows.Forms.CheckBox();
             this.ScriptText = new System.Windows.Forms.TextBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -60,7 +62,6 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ListIndexTableGrid = new System.Windows.Forms.DataGridView();
             this.ListTableIndexDefGrid = new System.Windows.Forms.DataGridView();
-            this.ExecuteScriptButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.MainPanelIndexManager.SuspendLayout();
@@ -359,6 +360,18 @@
             this.ListField1Grid.Size = new System.Drawing.Size(553, 247);
             this.ListField1Grid.TabIndex = 2;
             // 
+            // ExecuteScriptButton
+            // 
+            this.ExecuteScriptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ExecuteScriptButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(187)))), ((int)(((byte)(120)))));
+            this.ExecuteScriptButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ExecuteScriptButton.Location = new System.Drawing.Point(424, 3);
+            this.ExecuteScriptButton.Name = "ExecuteScriptButton";
+            this.ExecuteScriptButton.Size = new System.Drawing.Size(110, 24);
+            this.ExecuteScriptButton.TabIndex = 12;
+            this.ExecuteScriptButton.Text = "Execute Script";
+            this.ExecuteScriptButton.UseVisualStyleBackColor = false;
+            // 
             // CreateTableCheckBox
             // 
             this.CreateTableCheckBox.AutoSize = true;
@@ -456,18 +469,6 @@
             this.ListTableIndexDefGrid.Size = new System.Drawing.Size(553, 349);
             this.ListTableIndexDefGrid.TabIndex = 2;
             // 
-            // ExecuteScriptButton
-            // 
-            this.ExecuteScriptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ExecuteScriptButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(187)))), ((int)(((byte)(120)))));
-            this.ExecuteScriptButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ExecuteScriptButton.Location = new System.Drawing.Point(424, 3);
-            this.ExecuteScriptButton.Name = "ExecuteScriptButton";
-            this.ExecuteScriptButton.Size = new System.Drawing.Size(110, 24);
-            this.ExecuteScriptButton.TabIndex = 12;
-            this.ExecuteScriptButton.Text = "Execute Script";
-            this.ExecuteScriptButton.UseVisualStyleBackColor = false;
-            // 
             // ZilongIndexManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -479,6 +480,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ZilongIndexManagerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
