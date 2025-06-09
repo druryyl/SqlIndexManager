@@ -64,12 +64,12 @@ namespace SqlIndexManager.Net461
                 case "SMALLINT":
                 case "TINYINT":
                 case "BIT":
+                case "FLOAT":
                     // No length or scale for integer types
                     script += $"{GenInt(field.FieldName, field.AcuanType)}";
                     break;
                 case "DECIMAL":
                 case "NUMERIC":
-                case "FLOAT":
                     // Use length and scale for decimal types
                     script += $"{GenDecimal(field.FieldName, field.AcuanType)}";
                     break;

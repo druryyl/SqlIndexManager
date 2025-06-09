@@ -97,7 +97,7 @@
             this.Connection1Status,
             this.Connection2Status,
             this.ProgressBarStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 467);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 657);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
             this.statusStrip1.Size = new System.Drawing.Size(978, 24);
@@ -179,7 +179,7 @@
             this.MainPanelIndexManager.Controls.Add(this.SearchText);
             this.MainPanelIndexManager.Location = new System.Drawing.Point(6, 32);
             this.MainPanelIndexManager.Name = "MainPanelIndexManager";
-            this.MainPanelIndexManager.Size = new System.Drawing.Size(964, 430);
+            this.MainPanelIndexManager.Size = new System.Drawing.Size(964, 620);
             this.MainPanelIndexManager.TabIndex = 4;
             this.MainPanelIndexManager.Visible = false;
             // 
@@ -199,8 +199,8 @@
             // IndexManagerSplit.Panel2
             // 
             this.IndexManagerSplit.Panel2.Controls.Add(this.IndexDefGrid);
-            this.IndexManagerSplit.Size = new System.Drawing.Size(949, 386);
-            this.IndexManagerSplit.SplitterDistance = 235;
+            this.IndexManagerSplit.Size = new System.Drawing.Size(949, 576);
+            this.IndexManagerSplit.SplitterDistance = 350;
             this.IndexManagerSplit.TabIndex = 10;
             // 
             // ListIndexGrid
@@ -212,7 +212,7 @@
             this.ListIndexGrid.Location = new System.Drawing.Point(0, 0);
             this.ListIndexGrid.Name = "ListIndexGrid";
             this.ListIndexGrid.ReadOnly = true;
-            this.ListIndexGrid.Size = new System.Drawing.Size(949, 235);
+            this.ListIndexGrid.Size = new System.Drawing.Size(949, 350);
             this.ListIndexGrid.TabIndex = 8;
             // 
             // IndexDefGrid
@@ -222,7 +222,7 @@
             this.IndexDefGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.IndexDefGrid.Location = new System.Drawing.Point(0, 0);
             this.IndexDefGrid.Name = "IndexDefGrid";
-            this.IndexDefGrid.Size = new System.Drawing.Size(949, 147);
+            this.IndexDefGrid.Size = new System.Drawing.Size(949, 222);
             this.IndexDefGrid.TabIndex = 1;
             // 
             // ReadIndexButton
@@ -256,7 +256,7 @@
             this.MainPanelDbCompare.Controls.Add(this.DbComparerSplit);
             this.MainPanelDbCompare.Location = new System.Drawing.Point(6, 32);
             this.MainPanelDbCompare.Name = "MainPanelDbCompare";
-            this.MainPanelDbCompare.Size = new System.Drawing.Size(964, 430);
+            this.MainPanelDbCompare.Size = new System.Drawing.Size(964, 620);
             this.MainPanelDbCompare.TabIndex = 5;
             // 
             // DbComparerSplit
@@ -280,7 +280,7 @@
             this.DbComparerSplit.Panel2.Controls.Add(this.radioButton2);
             this.DbComparerSplit.Panel2.Controls.Add(this.radioButton1);
             this.DbComparerSplit.Panel2.Controls.Add(this.PanelIndex);
-            this.DbComparerSplit.Size = new System.Drawing.Size(951, 418);
+            this.DbComparerSplit.Size = new System.Drawing.Size(951, 608);
             this.DbComparerSplit.SplitterDistance = 380;
             this.DbComparerSplit.TabIndex = 12;
             // 
@@ -293,7 +293,7 @@
             this.ListTable1Grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ListTable1Grid.Location = new System.Drawing.Point(8, 37);
             this.ListTable1Grid.Name = "ListTable1Grid";
-            this.ListTable1Grid.Size = new System.Drawing.Size(372, 372);
+            this.ListTable1Grid.Size = new System.Drawing.Size(372, 562);
             this.ListTable1Grid.TabIndex = 1;
             // 
             // FilterTableNameText
@@ -326,7 +326,7 @@
             this.PenalField.Controls.Add(this.splitContainer2);
             this.PenalField.Location = new System.Drawing.Point(6, 37);
             this.PenalField.Name = "PenalField";
-            this.PenalField.Size = new System.Drawing.Size(553, 374);
+            this.PenalField.Size = new System.Drawing.Size(553, 564);
             this.PenalField.TabIndex = 2;
             // 
             // splitContainer2
@@ -345,8 +345,8 @@
             this.splitContainer2.Panel2.Controls.Add(this.ExecuteScriptButton);
             this.splitContainer2.Panel2.Controls.Add(this.CreateTableCheckBox);
             this.splitContainer2.Panel2.Controls.Add(this.ScriptText);
-            this.splitContainer2.Size = new System.Drawing.Size(553, 374);
-            this.splitContainer2.SplitterDistance = 164;
+            this.splitContainer2.Size = new System.Drawing.Size(553, 564);
+            this.splitContainer2.SplitterDistance = 247;
             this.splitContainer2.TabIndex = 3;
             // 
             // ListField1Grid
@@ -356,7 +356,7 @@
             this.ListField1Grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListField1Grid.Location = new System.Drawing.Point(0, 0);
             this.ListField1Grid.Name = "ListField1Grid";
-            this.ListField1Grid.Size = new System.Drawing.Size(553, 164);
+            this.ListField1Grid.Size = new System.Drawing.Size(553, 247);
             this.ListField1Grid.TabIndex = 2;
             // 
             // CreateTableCheckBox
@@ -380,7 +380,7 @@
             this.ScriptText.Multiline = true;
             this.ScriptText.Name = "ScriptText";
             this.ScriptText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ScriptText.Size = new System.Drawing.Size(553, 176);
+            this.ScriptText.Size = new System.Drawing.Size(553, 283);
             this.ScriptText.TabIndex = 0;
             this.ScriptText.WordWrap = false;
             // 
@@ -414,7 +414,7 @@
             this.PanelIndex.Controls.Add(this.splitContainer1);
             this.PanelIndex.Location = new System.Drawing.Point(6, 37);
             this.PanelIndex.Name = "PanelIndex";
-            this.PanelIndex.Size = new System.Drawing.Size(553, 374);
+            this.PanelIndex.Size = new System.Drawing.Size(553, 564);
             this.PanelIndex.TabIndex = 3;
             this.PanelIndex.Visible = false;
             // 
@@ -432,8 +432,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.ListTableIndexDefGrid);
-            this.splitContainer1.Size = new System.Drawing.Size(553, 374);
-            this.splitContainer1.SplitterDistance = 140;
+            this.splitContainer1.Size = new System.Drawing.Size(553, 564);
+            this.splitContainer1.SplitterDistance = 211;
             this.splitContainer1.TabIndex = 1;
             // 
             // ListIndexTableGrid
@@ -443,7 +443,7 @@
             this.ListIndexTableGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListIndexTableGrid.Location = new System.Drawing.Point(0, 0);
             this.ListIndexTableGrid.Name = "ListIndexTableGrid";
-            this.ListIndexTableGrid.Size = new System.Drawing.Size(553, 140);
+            this.ListIndexTableGrid.Size = new System.Drawing.Size(553, 211);
             this.ListIndexTableGrid.TabIndex = 1;
             // 
             // ListTableIndexDefGrid
@@ -453,7 +453,7 @@
             this.ListTableIndexDefGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ListTableIndexDefGrid.Location = new System.Drawing.Point(0, 0);
             this.ListTableIndexDefGrid.Name = "ListTableIndexDefGrid";
-            this.ListTableIndexDefGrid.Size = new System.Drawing.Size(553, 230);
+            this.ListTableIndexDefGrid.Size = new System.Drawing.Size(553, 349);
             this.ListTableIndexDefGrid.TabIndex = 2;
             // 
             // ExecuteScriptButton
@@ -473,7 +473,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(164)))), ((int)(((byte)(180)))), ((int)(((byte)(101)))));
-            this.ClientSize = new System.Drawing.Size(978, 491);
+            this.ClientSize = new System.Drawing.Size(978, 681);
             this.Controls.Add(this.MainPanelDbCompare);
             this.Controls.Add(this.MainPanelIndexManager);
             this.Controls.Add(this.statusStrip1);
@@ -482,7 +482,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ZilongIndexManagerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Zilong Index Manager";
+            this.Text = "Zilong DB-Tools";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
