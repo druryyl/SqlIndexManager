@@ -24,5 +24,6 @@ namespace SqlIndexManager.Net461.Model
         public DateTime LLookup { get; set; }
         public DateTime LUpdate { get; set; }
 
+        public List<IndexDefModel> ListIndexDef { get; set; }
     }
 }

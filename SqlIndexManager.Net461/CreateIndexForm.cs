@@ -4,13 +4,8 @@ using SqlIndexManager.Net461.Model;
 using SqlIndexManager.Net461.Repository;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SqlIndexManager.Net461
@@ -19,11 +14,13 @@ namespace SqlIndexManager.Net461
     {
         private IndexProfileDto _indexProfile;
         private string _tableName;
+        private ConnectionModel _conn;
 
-        public CreateIndexForm(string tableName)
+        public CreateIndexForm(string tableName, ConnectionModel conn)
         {
             InitializeComponent();
             _tableName = tableName;
+            _conn = conn;
             Reset();
 
             ListField();
@@ -31,7 +28,7 @@ namespace SqlIndexManager.Net461
 
         private void ListField()
         {
-            var dal = new IndexRepo();
+            var dal = new IndexRepo(_conn);
             var listField = dal.ListField(_indexProfile.TableName);
             ListFieldGrid.DataSource = listField;
         }
@@ -177,7 +174,7 @@ namespace SqlIndexManager.Net461
         {
             try
             {
-                using(var conn = new SqlConnection(ConnStringHelper.Get()))
+                using(var conn = new SqlConnection(_conn.ConnectionString))
                 {
                     conn.Execute(ScriptTextBox.Text);
                 }
