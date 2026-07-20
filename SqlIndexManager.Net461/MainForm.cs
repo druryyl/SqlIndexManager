@@ -23,6 +23,7 @@ namespace SqlIndexManager.Net461
         private List<TableModel> _listTable2 = new List<TableModel>();
         private readonly BindingSource _tableBindingSource;
         private readonly BindingList<TableDto> _listTableDataSource;
+        private readonly BindingList<TableDto> _listAllTableDataSource;
 
         private readonly BindingSource _fieldBindingSource;
         private readonly BindingList<FieldDto> _listFieldDataSource;
@@ -43,6 +44,9 @@ namespace SqlIndexManager.Net461
         const string COLOR_DIFFERENT1 = "#ACD2EA";
         const string COLOR_DIFFERENT2 = "#C9BED8";
 
+        const string PROTECTED_SERVER = "dev.smart-ics.com";
+        const string PROTECTED_DATABASE = "hospital";
+
         public ZilongIndexManagerForm()
         {
             InitializeComponent();
@@ -51,6 +55,7 @@ namespace SqlIndexManager.Net461
             _tableRepo1 = new TableRepo(_connection1);
             _tableRepo2 = new TableRepo(_connection2);
 
+            _listAllTableDataSource = new BindingList<TableDto>();
             _listTableDataSource = new BindingList<TableDto>();
             _tableBindingSource = new BindingSource(_listTableDataSource, null);
 
@@ -60,6 +65,16 @@ namespace SqlIndexManager.Net461
             InitControlEventHandler();
             InitGridTable();
             InitGridField();
+            InitCountLabel();
+        }
+
+        private void InitCountLabel()
+        {
+            CountSamaLabel.BackColor = ColorTranslator.FromHtml(COLOR_WHITE);
+            CountBedaFieldLabel.BackColor = ColorTranslator.FromHtml(COLOR_DIFFERENT1);
+            CountBedaIndexLabel.BackColor = ColorTranslator.FromHtml(COLOR_DIFFERENT2);
+            CountBelumAdaLabel.BackColor = ColorTranslator.FromHtml(COLOR_NOT_FOUND);
+            CountTidakPerluLabel.BackColor = ColorTranslator.FromHtml(COLOR_NOT_USED);
         }
 
         private void InitControlEventHandler()
@@ -90,12 +105,59 @@ namespace SqlIndexManager.Net461
             SearchText.KeyDown += SearchText_KeyDown;
             ReadDatabaseButton.Click += (s, e) => ReadDatabase();
             ExecuteScriptButton.Click += ExecuteScriptButton_Click;
+            
+            FilterTableNameText.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                    ReadDatabase();
+            };
 
             CreateTableCheckBox.CheckedChanged += CreateTableCheckBox_CheckedChanged;
+            ResultSamaCheckBox.CheckedChanged += (s, e) => FilterResult();
+            ResultBedaFieldCheckBox.CheckedChanged += (s, e) => FilterResult();
+            ResultBedaIndexCheckBox.CheckedChanged += (s, e) => FilterResult();
+            ResultBelumAdaCheckBox.CheckedChanged += (s, e) => FilterResult();
+            ResultTidakPerluCheckBox.CheckedChanged += (s, e) => FilterResult();
+        }
+
+        private void FilterResult()
+        {
+            List<string> conditions = new List<string>();
+            _listTableDataSource.Clear();
+            var tempList = new BindingList<TableDto>();
+            if (ResultSamaCheckBox.Checked)
+                foreach(var item in _listAllTableDataSource.Where(x => x.StatusCode == TABLE_SAMA).ToList())
+                    tempList.Add(item);
+
+            if (ResultBedaFieldCheckBox.Checked)
+                foreach(var item in _listAllTableDataSource.Where(x => x.StatusCode == TABLE_BEDA_FIELD).ToList())
+                    tempList.Add(item);
+
+            if (ResultBedaIndexCheckBox.Checked)
+                foreach(var item in _listAllTableDataSource.Where(x => x.StatusCode == TABLE_BEDA_INDEX).ToList())
+                    tempList.Add(item);
+
+            if (ResultBelumAdaCheckBox.Checked)
+                foreach(var item in _listAllTableDataSource.Where(x => x.StatusCode == TABLE_TIDAK_ADA).ToList())
+                    tempList.Add(item);
+
+            if (ResultTidakPerluCheckBox.Checked)
+                foreach(var item in _listAllTableDataSource.Where(x => x.StatusCode == TABLE_TIDAK_DIBUTUHKAN).ToList())
+                    tempList.Add(item);
+
+            tempList.OrderBy(x => x.TableName).ToList()
+                .ForEach(x => _listTableDataSource.Add(x));
+
         }
 
         private void ExecuteScriptButton_Click(object sender, EventArgs e)
         {
+            if (ProtectedProduction())
+            {
+                MessageBox.Show($"{_connection1.Database}@{_connection1.Server} is a protected database.\nPlease use another database to be modified.", "Protected Database", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var scriptExecutor = new SqlCommandExecutor(_connection1);
             try
             {
@@ -365,7 +427,7 @@ namespace SqlIndexManager.Net461
         {
             var dal = new IndexRepo(_connection1);
             _dbID = dal.GetDatabaseID(_connection1.Database);
-            var listIndex = dal.ListIndex(_dbID);
+            var listIndex = dal.ListIndex(_dbID, SearchText.Text);
 
             IEnumerable<IndexModel> result;
             if (SearchText.Text.Length > 0)
@@ -501,11 +563,37 @@ namespace SqlIndexManager.Net461
             }
 
             _listTableDataSource.Clear();
+            _listAllTableDataSource.Clear();
             _listTable1 = _listTable1.OrderBy(x => x.TableName).ToList();
-            _listTable1.ForEach(x => _listTableDataSource.Add(new TableDto(x.TableName, x.StatusText, x.Status)));
+            _listTable1.ForEach(x => 
+            {
+                //_listTableDataSource.Add(new TableDto(x.TableName, x.StatusText, x.Status));
+                _listAllTableDataSource.Add(new TableDto(x.TableName, x.StatusText, x.Status));
+            });
             ListTable1Grid.Refresh();
 
             ProgressBarStatus.Value = 0;
+            FilterResult();
+            RecalcCountLabel();
+        }
+
+        private bool ProtectedProduction()
+        {
+            if (_connection1.Server.ToLower() == PROTECTED_SERVER.ToLower() 
+                && _connection1.Database.ToLower() == PROTECTED_DATABASE.ToLower())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void RecalcCountLabel()
+        {
+            CountSamaLabel.Text = _listAllTableDataSource.Count(x => x.StatusCode == TABLE_SAMA).ToString();
+            CountBedaFieldLabel.Text = _listAllTableDataSource.Count(x => x.StatusCode == TABLE_BEDA_FIELD).ToString();
+            CountBedaIndexLabel.Text = _listAllTableDataSource.Count(x => x.StatusCode == TABLE_BEDA_INDEX).ToString();
+            CountBelumAdaLabel.Text = _listAllTableDataSource.Count(x => x.StatusCode == TABLE_TIDAK_ADA).ToString();
+            CountTidakPerluLabel.Text = _listAllTableDataSource.Count(x => x.StatusCode == TABLE_TIDAK_DIBUTUHKAN).ToString();
         }
 
         private void dBCompareToolStripMenuItem_Click(object sender, EventArgs e)

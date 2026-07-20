@@ -1,13 +1,9 @@
 ﻿using Dapper;
 using Nuna.Lib.DataAccessHelper;
 using SqlIndexManager.Net461.Model;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SqlIndexManager.Net461.Repository
 {
@@ -20,15 +16,30 @@ namespace SqlIndexManager.Net461.Repository
             _connString = conn.ConnectionString;
             _conn = conn;
         }
-        public IEnumerable<TableModel> ListTable()
+        public IEnumerable<TableModel> ListTable(string filterTableName)
         {
             var sql = @"
                 SELECT  name AS TableName
                 FROM sys.objects
                 WHERE type = 'U' ";
-            using(var conn = new SqlConnection(_connString))
+
+            var dp = new DynamicParameters();
+            if (filterTableName.Trim() != string.Empty)
             {
-                var result = conn.Read<TableModel>(sql);
+                sql += " AND name LIKE @filterTableName ";
+                dp.AddParam("@filterTableName", $"%{filterTableName}%", SqlDbType.VarChar);
+            }
+            using (var conn = new SqlConnection(_connString))
+            {
+                IEnumerable<TableModel> result;
+                if (filterTableName.Trim() == string.Empty)
+                {
+                    result = conn.Read<TableModel>(sql);
+                }
+                else
+                {
+                    result = conn.Read<TableModel>(sql, dp);
+                }
                 return result;
             }
         }
@@ -61,7 +72,7 @@ namespace SqlIndexManager.Net461.Repository
             }
         }
 
-        public IEnumerable<FieldModel> ListField()
+        public IEnumerable<FieldModel> ListField2(string filterTableName)
         {
             var sql = @"
                 SELECT  
@@ -78,14 +89,29 @@ namespace SqlIndexManager.Net461.Repository
                     cc.[type] = 'U' 
                     AND bb.name NOT IN ('sysname', 'xml', 'hierarchyid', 'geometry', 'geography')";
 
+            var dp = new DynamicParameters();
+            if (filterTableName.Trim() != string.Empty)
+            {
+                sql += " AND cc.name LIKE @filterTableName ";
+                dp.AddParam("@filterTableName", $"%{filterTableName}%", SqlDbType.VarChar);
+            }
+
             using (var conn = new SqlConnection(_connString))
             {
-                var result = conn.Read<FieldModel>(sql);
+                IEnumerable<FieldModel> result;
+                if (filterTableName.Trim() == string.Empty)
+                {
+                    result = conn.Read<FieldModel>(sql);
+                }
+                else
+                {
+                    result = conn.Read<FieldModel>(sql, dp);
+                }
                 return result;
             }
         }
 
-        public IEnumerable<IndexModel> ListIndex(int dbID)
+        public IEnumerable<IndexModel> ListIndex(int dbID, string filterTableName)
         {
             var sql = @"
                 SELECT
@@ -109,12 +135,20 @@ namespace SqlIndexManager.Net461.Repository
                     LEFT JOIN sys.objects aa1 ON aa.object_id = aa1.object_id
                     LEFT JOIN sys.dm_db_index_usage_stats aa2 on aa.object_id = aa2.object_id AND aa.index_id = aa2.index_id AND aa2.database_id = @dbID
                 WHERE
-                    aa1.type = 'U'
-                ORDER BY 
-                    aa1.name, aa.index_id ";
+                    aa1.type = 'U'";
+
 
             var dp = new DynamicParameters();
             dp.AddParam("@dbID", dbID, SqlDbType.Int);
+
+            if (filterTableName.Trim() != string.Empty)
+            {
+                sql += " AND aa1.name LIKE @filterTableName ";
+                dp.AddParam("@filterTableName", $"%{filterTableName}%", SqlDbType.VarChar);
+            }
+            sql += @"
+                ORDER BY 
+                    aa1.name, aa.index_id ";
 
             using (var conn = new SqlConnection(_connString))
             {
@@ -164,7 +198,6 @@ namespace SqlIndexManager.Net461.Repository
                 return result;
             }
         }
-
 
         public IEnumerable<IndexDefModel> ListIndexDef(string indexName, string tableName)
         {
@@ -218,7 +251,6 @@ namespace SqlIndexManager.Net461.Repository
                 return result;
             }
         }
-
 
         public int GetDatabaseID(string dbName)
         {

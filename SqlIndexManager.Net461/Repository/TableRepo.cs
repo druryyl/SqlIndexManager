@@ -50,19 +50,19 @@ namespace SqlIndexManager.Net461.Repository
             return result;
         }
 
-        public void PopulateAllData()
+        public void PopulateAllData(string filterTableName)
         {
-            _listAllTable = _indexRepo.ListTable()?.ToList() ?? new List<TableModel>();
-            _listAllField = _indexRepo.ListField()?.ToList() ?? new List<FieldModel>();
+            _listAllTable = _indexRepo.ListTable(filterTableName)?.ToList() ?? new List<TableModel>();
+            _listAllField = _indexRepo.ListField2(filterTableName)?.ToList() ?? new List<FieldModel>();
 
             var dbId = _indexRepo.GetDatabaseID(_conn.Database);
-            _listAllIndex = _indexRepo.ListIndex(dbId)?.ToList() ?? new List<IndexModel>();
+            _listAllIndex = _indexRepo.ListIndex(dbId, filterTableName)?.ToList() ?? new List<IndexModel>();
             _listAllIndexDef = _indexRepo.ListIndexDef()?.ToList() ?? new List<IndexDefModel>();
         }
 
         public List<TableModel> PopulateAllTables(string filterTableName)
         {
-            PopulateAllData();
+            PopulateAllData(filterTableName);
             if (!string.IsNullOrEmpty(filterTableName))
             {
                 filterTableName = filterTableName.ToLower();
